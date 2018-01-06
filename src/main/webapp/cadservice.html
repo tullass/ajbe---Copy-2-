@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Start Page</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body data-ng-app="Servico">
+	<h1>Servico</h1>
+
+	<script type="text/javascript" src="resources/angular.js"></script>
+	<script type="text/javascript" src="resources/servicos.js"></script>
+	<form>
+		<div data-ng-controller="ServicoControlle as controller">
+
+			<label for="assunto1">Abreviacao: </label> <input type="text"
+				maxlength="4" id="assunto1"
+				data-ng-model="controller.servico.abreviatura"><br> <label
+				for="assunt">Descricao: </label> <input type="text" id="assunt"
+				data-ng-model="controller.servico.descricao"><br> <label
+				for="assun">Valor: </label> <input type="text" id="assun"
+				data-ng-model="controller.servico.preco"> 
+			<br> <br> <br> 
+ <br>
+			<br> <br>
+			<button type="button" data-ng-click="controller.salvar(servico)">Salvar</button>
+			<button type="button" data-ng-click="controller.novo()">Novo</button>
+			<br><br> <br>
+			<table border="1">
+				<tr>
+					<th>CodTurma</th>
+					<th>Descricao</th>
+					<th>Preco</th>
+
+				</tr>
+				<tr
+					data-ng-repeat="servico in controller.servicos | filter:{descricao:pesquisa} track by $index">
+					<td>{{servico.abreviatura}}</td>
+					<td>{{servico.descricao}}</td>
+					<td>{{servico.preco}}</td>
+					<td>
+						<button type="button" data-ng-click="controller.alterar(servico)">Alterar</button>
+						<button type="button" data-ng-click="controller.deletar(servico)">Excluir</button>
+					</td>
+				</tr>
+			</table>
+
+		</div>
+	</form>
+</body>
+</html>

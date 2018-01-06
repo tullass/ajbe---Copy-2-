@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Start Page</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body data-ng-app="Helpaluno">
+	<h1>Aluno</h1>
+
+	<script src="resources/angular.js"></script>
+	<script src="resources/aluno.js"></script>
+	<form>
+		<div data-ng-controller="alunoControlle as controller">
+
+			<label for="assunt">Nome: </label> <input type="text" id="assunt"
+				data-ng-model="controller.aluno.nome"><br> <label
+				for="assunt">Localidade: </label> <input type="text" id="assunt"
+				data-ng-model="controller.aluno.localidade"><br>			<br>
+				
+			<button type="button" data-ng-click="controller.salvar(aluno)">Salvar</button>
+					<br>
+					<br>
+			<br>
+			<table>
+				<tr>
+					<th>Nome</th>
+					<th>Localidade</th>
+					<th>Morada</th>
+
+				</tr>
+				<tr
+					data-ng-repeat="aluno in controller.alunos | filter:pesquisa track by aluno.id">
+					<td>{{aluno.nome}}</td>
+					<td>{{aluno.localidade}}</td>
+
+					<td>
+						<button type="button" data-ng-click="controller.alterar(aluno)">Alterar</button>
+						<button type="button" data-ng-click="controller.deletar(aluno)">Excluir</button>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</form>
+</body>
+
+
+</html>

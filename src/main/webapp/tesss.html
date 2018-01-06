@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Index</title>
+<!--<link rel="stylesheet/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />-->
+<script rel="stylesheet/javascript"
+	src="node_modules/angular/angular.min.js"></script>
+<script src="resources/angular.js"></script>
+
+<!-- Latest compiled and minified CSS
+ -->
+ <link rel="stylesheet" 
+ 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+ 	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" 
+ 	crossorigin="anonymous">
+
+
+<script>
+	angular.module("factura", []);
+	angular.module("factura").controller(
+			"facturaController",
+			function($scope, $http) {
+				var urlBase = 'http://localhost:8080/AnguLaJs/rest/';
+				$scope.servicos = [];
+				$scope.subtotal = 0;
+				$scope.iva = 0.17;
+
+				var servico = {
+					id : '',
+					designacao : '',
+					qty : 1,
+					preco : 0,
+					total : 0
+				};
+
+				$scope.typeOfService = [ {
+
+				} ];
+
+				$scope.servicos.push(servico);
+
+				function getServicesServer() {
+					$http.get(urlBase + 'fatura/servico').success(
+							function(servicos) {
+								servicos.forEach(function(servico) {
+									var ser = {
+										id : servico.id,
+										nome : servico.codTurma,
+										descricao : servico.descricao,
+										preco : servico.preco
+									}
+									$scope.typeOfService.push(ser);
+								});
+							}).error(function errorCallback(response) {
+						$scope.ocorreuErro();
+					});
+				}
+				getServicesServer();
+				$scope.newService = function() {
+					$scope.servicos.push({
+						id : '',
+						designacao : '',
+						qty : 1,
+						preco : 0,
+						total : 0
+					});
+				}
+
+				$scope.alterData = function(index, value) {
+					$scope.servicos[index].id = value.id;
+					$scope.servicos[index].designacao = value.nome;
+					$scope.servicos[index].preco = value.preco;
+					$scope.calculateTotal(index, value.preco);
+				}
+
+				$scope.calculateTotal = function(index, preco) {
+					$scope.servicos[index].total = preco
+							* $scope.servicos[index].qty;
+					$scope.facturaSubTotal();
+				}
+
+				$scope.facturaSubTotal = function() {
+					var innerTotal = 0;
+
+					$scope.servicos.forEach(function(servico) {
+						innerTotal += servico.total;
+					});
+					$scope.subtotal = innerTotal;
+				}
+
+			});
+</script>
+</head>
+<body ng-app="factura">
+	<div class="container" ng-controller="facturaController">
+		<section>
+			<!--Header-->
+			<div class="row">
+				<span class="col-sm-4"> <select>
+						<option>jkasdbjkbgas</option>
+				</select>
+				</span> <span class="col-sm-4"> NR: {{number}} </span> <span
+					class="col-sm-4"> Data {{date}} </span>
+			</div>
+			<br> <br> <br>
+
+			<!--Dados dos Cliente-->
+			<!-- 			<div class="row"> -->
+			<!-- 				<form class="form-inline"> -->
+			<!-- 					<div class="form-group"> -->
+			<!-- 						<label class="sr-only">Nome</label> <input type="text" -->
+			<!-- 							class="form-control" placeholder="Nome" ng-model="cliente.name"> -->
+			<!-- 					</div> -->
+			<!-- 					<div class="form-group"> -->
+			<!-- 						<label class="sr-only">Numero</label> <input type="text" -->
+			<!-- 							class="form-control" placeholder="NR" ng-model="cliente.number"> -->
+			<!-- 					</div> -->
+			<!-- 					<div class="form-group"> -->
+			<!-- 						<label class="sr-only">Morada</label> <input type="text" -->
+			<!-- 							class="form-control" placeholder="Morada" -->
+			<!-- 							ng-model="cliente.address"> -->
+			<!-- 					</div> -->
+			<!-- 					<div class="form-group"> -->
+			<!-- 						<label class="sr-only">NUIT</label> <input type="text" -->
+			<!-- 							class="form-control" placeholder="NUIT" ng-model="cliente.nuit"> -->
+			<!-- 					</div> -->
+
+			<!-- 				</form> -->
+			<!-- 			</div> -->
+
+			<!--Dados para facturacao-->
+			<div class="row">
+				<div class="form-inline" ng-repeat="servico in servicos">
+					<div class="form-group">
+						<select ng-model="selectedService" class="control"
+							ng-change="alterData($index, selectedService)"
+							ng-options="y.nome for (x , y) in typeOfService track by y.id">
+							<option value=""></option>
+						</select><br>
+						<!-- 						<select data-ng-model=chamado.tipo.id> -->
+						<!-- 							<option data-ng-repeat="selectedService in typeOfService" value="{{selectedService.id}}">{{selectedService.nome}}</option> -->
+
+						<!-- 						</select> -->
+					</div>
+					<div class="form-group">
+						<label class="sr-only">Id</label> <input type="text"
+							class="form-control" readonly ng-model="servico.id">
+						{{servico.id}}
+					</div>
+					<div class="form-group">
+						<label class="sr-only">Designacao</label> <input type="text"
+							class="form-control" readonly placeholder="Designacao"
+							ng-model="servico.designacao"> {{servico.id}}
+					</div>
+					<div class="form-group">
+						<label class="sr-only">Morada</label> <input type="text"
+							class="form-control"
+							ng-change="calculateTotal($index, selectedService.preco)"
+							placeholder="QTY" ng-model="servico.qty">
+					</div>
+					<div class="form-group">
+						<label class="sr-only">NUIT</label> <input type="text"
+							class="form-control" readonly placeholder="Preco"
+							ng-model="servico.preco">
+					</div>
+					<div class="form-group">
+						<label class="sr-only">Email address</label> <input type="text"
+							class="form-control" readonly placeholder="Total"
+							ng-model="servico.total">
+					</div>
+					{{servico.id}}
+				</div>
+				<button class="btn btn-default" ng-click="newService()">Add</button>
+			</div>
+
+			<!--Final da cotacao-->
+			<div class="row">
+				<div class="col-sm-6 col-sm-offset-6">
+					<form class="form-inline">
+						<div class="form-group">
+							<label>SubTotal</label> <span class="label label-primary">{{subtotal}}</span>
+						</div>
+					</form>
+					<form class="form-inline">
+						<div class="form-group">
+							<label>IVA</label> <span class="label label-primary">{{subtotal
+								* iva}}</span>
+						</div>
+					</form>
+					<form class="form-inline">
+						<div class="form-group">
+							<label>TOTAL</label> <span class="label label-danger">{{subtotal
+								* (iva + 1)}}</span>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			{{servicos}}
+		</section>
+	</div>
+</body>
+</html>

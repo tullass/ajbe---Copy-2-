@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Start Page</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<link rel="stylesheet" type="text/css" href="resources/materialize.css">
+
+</head>
+
+<body data-ng-app="factura">
+	<h4>Fatura</h4>
+
+	<script type="text/javascript" src="resources/angular.js"></script>
+	<script type="text/javascript" src="resources/faturaa3.js"></script>
+	<script src="resources/jquery.min.js"></script>
+	<script src="resources/mat.js"></script>
+
+
+	<script>
+		$(document).ready(function() {
+			$('.modal').modal();
+		});
+	</script>
+	<br>
+	<br>
+	<br>
+	<div class="row">
+
+		<form>
+
+			<div data-ng-controller="facturaController">
+
+				<label for="assunt">Tipo Doc. </label> <select
+					data-ng-model=fatura.tipo.id>
+					<option data-ng-repeat="fatura in tipos" value="{{fatura.id}}">{{fatura.tipo}}</option>
+				</select> <label for="assunt">No.: </label> <input type="text" id="assunt"
+					data-ng-model="fatura.tipo.id" /> <label>Data: </label>
+				{{controller.currentTime }}<br>Aluno<input type="text"
+					ng-model="fatura.aluno.nome" readonly="readonly">Codigo<input
+					type="text" ng-model="fatura.aluno.id" readonly="readonly">
+				<a class="waves-effect waves-light btn-flat modal-trigger"
+					href="#modal1">Buscar</a> <br> <br> <br> <br> <br>
+
+				<!-- Modal Structure -->
+				<div id="modal1" class="modal modal-fixed-footer">
+					<div class="modal-content">
+						<h4>Modal Header</h4>
+						<br>
+						<p>A bunch of text</p>
+						<input type="text" data-ng-model="pesquisa" placeholder="Pesquisa"><br>
+						<br> <br>
+						<table>
+							<tr>
+								<th>Nome</th>
+								<th>Localidade</th>
+								<th>Morada</th>
+
+							</tr>
+							<tr
+								data-ng-repeat="aluno in alunos | filter:pesquisa track by aluno.id">
+
+								<td>{{aluno.nome}}</td>
+								<td>{{aluno.localidade}}</td>
+								<td>{{aluno.morada}}</td>
+								<td>
+									<button type="button"
+										class="modal-action modal-close waves-effect waves-green"
+										data-ng-click="alterar(aluno)">Alterar</button>
+								</td>
+							</tr>
+						</table>
+						<br>
+
+					</div>
+					<div class="modal-footer">
+						<button
+							class="modal-action modal-close waves-effect waves-green btn-flat ">Agree</button>
+					</div>
+				</div>
+					<div ng-repeat="servico in servicos">
+						<select ng-model="selectedService" 
+							ng-change="alterData($index, selectedService)"
+							ng-options="y.abreviatura for (x , y) in typeOfService track by y.id">
+							<option value=""></option>
+						</select>
+						<label >Designacao</label> <input type="text"
+							 readonly placeholder="Designacao"
+							ng-model="selectedService.descricao"> 
+						<label class="sr-only">QTY</label> <input type="text"
+							ng-change="calculateTotal($index, selectedService.preco)"
+							placeholder="QTY" ng-model="servico.qty">
+					
+						<label >Preco</label> <input type="text"
+						 readonly placeholder="Preco"
+							ng-model="servico.preco">
+						<label>Total</label> <input type="text"
+							 readonly placeholder="Total"
+							ng-model="servico.total">								</div>
+							
+				<br> <a href ng-click="newService()">Add New</a> <br>
+					
+					<br> <label>SubTotal</label> <span class="label label-primary">{{subtotal}}</span><br>
+					<label>IVA</label> <span class="label label-primary">{{subtotal
+						* iva}}</span><br>
+					<label>TOTAL</label> <span class="label label-danger">{{subtotal
+						* (iva + 1)}}</span>
+				<br>				<br>
+				
+				<button ng-click="add(fatura)">salvar</button>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

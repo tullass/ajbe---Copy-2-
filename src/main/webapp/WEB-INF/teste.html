@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular.min.js"></script>
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script src="resources/autoCompleteCTRL.js"></script>
+
+	<link rel="stylesheet" type="text/css"
+		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<div class="dropdown dropdown-scroll" ng-app="app">
+		<button class="btn btn-default dropdown-toggle" type="button"
+			id="dropdownMenu1" data-toggle="dropdown">
+			Select <span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1"
+			ng-controller="ListCtrl">
+			<li role="presentation">
+				<div class="input-group input-group-sm search-control">
+					<span class="input-group-addon"> <span
+						class="glyphicon glyphicon-search"></span>
+					</span> <input type="text" class="form-control" placeholder="Query"
+						ng-model="query"></input>
+				</div>
+			</li>
+			<li role="presentation" ng-repeat='item in items | filter:query'>
+				<a href="#"> {{item.name}} </a>
+			</li>
+		</ul>
+	</div>
+</body>
+</html>

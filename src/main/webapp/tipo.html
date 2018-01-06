@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Start Page</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body data-ng-app="tipoServico">
+	<h1>Tipo Documento</h1>
+
+	<script src="resources/angular.js"></script>
+	<script src="resources/tipo.js"></script>
+	<form>
+		<div data-ng-controller="tipoControlle as controller">
+
+			<label for="assunt">Descricao: </label> <input type="text"
+				id="assunt" data-ng-model="controller.tipo.tipo"><br>
+
+			<button type="button" data-ng-click="controller.salvar(tipo)">Salvar</button>
+			<table border="1">
+				<tr>
+					<th>Descricao</th>
+				</tr>
+				<tr data-ng-repeat="tipo in controller.tipos">
+					<td>{{tipo.tipo}}</td>
+					<td>
+						<button type="button" data-ng-click="controller.alterar(tipo)">Alterar</button>
+						<button type="button" data-ng-click="controller.deletar(tipo)">Excluir</button>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</form>
+</body>
+
+
+</html>
